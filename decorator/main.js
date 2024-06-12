@@ -1,22 +1,19 @@
-function deprecate(message) {
-  return (target, name, descriptor) => {
-    const origin = descriptor.value;
-    console.log("Target: ", target);
-    console.log("Origin: ", origin);
-    console.log(`Deprecate warning[${name}]: ${message}`);
-    return descriptor;
-  };
-}
+const readonly = (target, key, descriptor) => {
+  descriptor.writable = false;
+  return descriptor;
+};
 
-class Example {
-  @deprecate('Consider to use "newFunc" instead')
-  oldFunc() {
-    console.log("This is old function.");
+class Cat {
+  name;
+  constructor(name) {
+    this.name = name;
   }
-  newFunc() {
-    console.log("This is new function.");
+
+  @readonly
+  meow() {
+    return `${this.name} says Meow`;
   }
 }
 
-const example = new Example();
-example.oldFunc();
+const cat = new Cat("Tom");
+console.log(cat.meow());
